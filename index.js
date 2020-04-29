@@ -1,13 +1,20 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const width = document.body.clientWidth;
-const height = document.body.clientHeight;
+// const width = document.body.clientWidth;
+const width =
+  window.innerWidth ||
+  document.documentElement.clientHeight ||
+  document.body.clientWidth;
+const height =
+  window.innerHeight ||
+  document.documentElement.clientHeight ||
+  document.body.clientHeight;
 canvas.width = width;
 canvas.height = height;
 
 let nodes = [];
-let node_count = 5;
+let node_count = 30;
 
 class Node {
   constructor() {
@@ -23,9 +30,13 @@ class Node {
   draw(ctx) {
     if (this.y >= height || this.y < 0) {
       this.vel_y *= -1;
+      // keep inside the view
+      this.y = Math.max(0, Math.min(height, this.y));
     }
     if (this.x >= width || this.x < 0) {
       this.vel_x *= -1;
+      // keep inside the view
+      this.x = Math.max(0, Math.min(width, this.x));
     }
     this.y += this.vel_y;
     this.x += this.vel_x;
